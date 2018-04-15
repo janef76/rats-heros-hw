@@ -1,19 +1,25 @@
 const assert = require('assert');
 const Hero = require('../hero.js');
 const Task = require('../task.js');
+const Food = require('../food.js');
 
 describe('Hero', function() {
 
   let hero;
+  let hero1;
+  let food;
   let task1;
   let task2;
   let tasks;
 
   beforeEach(function() {
-    task1 = new Task ('Hard', 5, 10, false);
-    task2 = new Task ('Easy', 1, 2, false);
-    tasks = [task1, task2];
-    hero = new Hero ('Batman', 20, 'apple')
+    task1 = new Task ('Hard', 1, 10, false);
+    task2 = new Task ('Easy', 5, 2, false);
+    task3 = new Task ('Med', 3, 4, false);
+    tasks = [task1, task2, task3];
+    food = new Food ('Banana', 4);
+    hero = new Hero ('Batman', 20, 'apple');
+    hero1 = new Hero ('Banana Man', 30, 'Banana');
   });
 
   it('Should have a name', function() {
@@ -26,7 +32,11 @@ describe('Hero', function() {
   });
 
   it('Should have food', function() {
-    assert.strictEqual(hero.food, 'apple');
+    assert.strictEqual(hero.favFood, 'apple');
+  });
+
+  it('Should have food2', function() {
+    assert.strictEqual(hero1.favFood, 'Banana');
   });
 
   it('Should be able to talk', function() {
@@ -34,13 +44,45 @@ describe('Hero', function() {
   });
 
   it('Should start with no tasks', function() {
-    assert.strictEqual(0, hero.tasks.length);
+    assert.strictEqual(hero.tasks.length, 0);
   });
 
   it('Should be able to add tasks', function() {
     hero.addTask(task1);
     hero.addTask(task2);
-    assert.strictEqual(2, hero.tasks.length);
+    assert.strictEqual(hero.tasks.length, 2);
   })
+
+  it('Should be able to eat food and increase health value', function() {
+    assert.strictEqual(hero.canEat(food), 24);
+  })
+
+  it('Should be able to eat favorite food increasing by 1.5', function() {
+    assert.strictEqual(hero1.canEat(food), 36);
+  })
+
+  it('Should be able to sort by urgency', function() {
+    hero.addTask(task1);
+    hero.addTask(task2);
+    hero.addTask(task3);
+    assert.deepStrictEqual(hero.sortUrgency('urgency'), [task1, task3, task2])
+  })
+
+  it('Should be able to view tasks completed', function() {
+    hero.addTask(task1);
+    hero.addTask(task2);
+    hero.addTask(task3);
+    task1.markCompleted(task1);
+    assert.deepStrictEqual(hero.showComplete(true), [task1]);
+  })
+
+  it('Should only show tasks not completed', function() {
+    hero.addTask(task1);
+    hero.addTask(task2);
+    hero.addTask(task3);
+    task1.markCompleted(task1);
+    assert.deepStrictEqual(hero.showComplete(false), [task2, task3])
+  })
+
 
 })
