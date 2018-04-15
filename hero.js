@@ -23,15 +23,16 @@ Hero.prototype.canEat = function (food) {
 
 Hero.prototype.sortUrgency = function(urgency) {
   return this.tasks.sort(function(a, b) {
-    return a[urgency] - b[urgency];
+    return a.urgency - b.urgency;
   });
 }
 
 Hero.prototype.showComplete = function (complete) {
-  const arrayOfTasks = this.tasks.filter((task) => {
-    return task.completed === complete;
-  });
-  return arrayOfTasks;
+  // const arrayOfTasks = this.tasks.filter((task) => {
+  //   return task.completed === complete;
+  // });
+  // return arrayOfTasks;
+  return this.tasks.filter((task) => task.completed === complete);
 };
 
 module.exports = Hero;
