@@ -2,6 +2,7 @@ const assert = require('assert');
 const Hero = require('../hero.js');
 const Task = require('../task.js');
 const Food = require('../food.js');
+const Rat = require('../rat.js');
 
 describe('Hero', function() {
 
@@ -11,15 +12,17 @@ describe('Hero', function() {
   let task1;
   let task2;
   let tasks;
+  let rat;
 
   beforeEach(function() {
     task1 = new Task ('Hard', 1, 10, false);
     task2 = new Task ('Easy', 5, 2, false);
     task3 = new Task ('Med', 3, 4, false);
     tasks = [task1, task2, task3];
-    food = new Food ('Banana', 4);
+    food = new Food ('Banana', 4, false);
     hero = new Hero ('Batman', 20, 'apple');
     hero1 = new Hero ('Banana Man', 30, 'Banana');
+    rat = new Rat ('Ratty');
   });
 
   it('Should have a name', function() {
@@ -65,7 +68,14 @@ describe('Hero', function() {
     hero.addTask(task1);
     hero.addTask(task2);
     hero.addTask(task3);
-    assert.deepStrictEqual(hero.sortUrgency('urgency'), [task1, task3, task2])
+    assert.deepStrictEqual(hero.sortUrgency('urgency'), [task1, task3, task2]);
+  })
+
+  it('Should be able to sort by reward', function() {
+    hero.addTask(task1);
+    hero.addTask(task2);
+    hero.addTask(task3);
+    assert.deepStrictEqual(hero.sortUrgency('reward'), [task2, task3, task1]);
   })
 
   it('Should be able to view tasks completed', function() {
@@ -81,8 +91,12 @@ describe('Hero', function() {
     hero.addTask(task2);
     hero.addTask(task3);
     task1.markCompleted(task1);
-    assert.deepStrictEqual(hero.showComplete(false), [task2, task3])
+    assert.deepStrictEqual(hero.showComplete(false), [task2, task3]);
   })
 
+  it('Should reduce health points if eats poisonous food', function() {
+    rat.touchFood(food);
+    assert.strictEqual(hero.reduceHealth(food), 12);
+  })
 
 })

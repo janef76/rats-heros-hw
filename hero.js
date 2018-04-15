@@ -15,24 +15,24 @@ Hero.prototype.addTask = function (task) {
 
 Hero.prototype.canEat = function (food) {
   if(this.favFood === food.name) {
-    return this.health += food.replenishment_value * 1.5;
+    return this.health += food.replenishmentValue * 1.5;
   } else {
-    return this.health += food.replenishment_value;
+    return this.health += food.replenishmentValue;
   };
 };
 
-Hero.prototype.sortUrgency = function(urgency) {
+Hero.prototype.sortUrgency = function(valueToSort) {
   return this.tasks.sort(function(a, b) {
-    return a.urgency - b.urgency;
+    return a[valueToSort] - b[valueToSort];
   });
 }
 
 Hero.prototype.showComplete = function (complete) {
-  // const arrayOfTasks = this.tasks.filter((task) => {
-  //   return task.completed === complete;
-  // });
-  // return arrayOfTasks;
   return this.tasks.filter((task) => task.completed === complete);
 };
+
+Hero.prototype.reduceHealth = function (food) {
+  return this.health -= food.replenishmentValue * 2;
+}
 
 module.exports = Hero;
